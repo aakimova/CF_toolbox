@@ -1,0 +1,313 @@
+---
+title: " "
+output: 
+  html_document:
+    includes: 
+      in_header: header.md 
+    toc: yes
+    toc_depth: '4'
+    toc_float: true
+    df_print: paged
+    fig_caption: no
+    keep_tex: yes
+    number_sections: no
+    fig_crop: yes
+    theme: cerulean
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width=8, fig.heigt=10)
+
+```
+\
+
+<span style="color: black;">
+<center>
+<b>
+Please choose a model from the Menu on your left or scroll down to choose the model of interest:
+</b>
+</center>
+</span>
+
+
+```{r setup1, echo=F, include=FALSE}
+
+library(mapview)
+library(sp)
+library(sf)
+library(leaflet)
+library(maps)
+
+
+rm(list=ls())  # Clear workspace
+graphics.off()  # close opened figures
+
+sp1<-data.frame(Long=c(-5, 10, 10, -5, -5), Lat=c(52, 52, 60, 60, 52))
+sp2<-data.frame(Long=c(0, 4, 4, 0, 0), Lat=c(52, 52, 54, 54, 52))
+
+coordinates(sp1) <- ~Long + Lat
+proj4string(sp1) <- CRS("+init=epsg:4326")
+
+pts1 = matrix(0, 5, 2)
+pts1[, 1] = sp1$Long
+pts1[, 2] = sp1$Lat
+sl1 = st_sfc(st_linestring(pts1), crs = 4326)
+
+coordinates(sp2) <- ~Long + Lat
+proj4string(sp2) <- CRS("+init=epsg:4326")
+pts2 = matrix(0, 5, 2)
+pts2[,1]=sp2$Long
+pts2[,2]=sp2$Lat
+sl2 = st_sfc(st_linestring(pts2), crs = 4326)
+
+
+```
+```{css, echo=FALSE}
+.blackbox {
+  padding: 1em;
+  background: rgb(135,206,250, 0.2);
+  color: black;
+  border: 2px solid rgb(135,206,250, 0.8);
+  border-radius: 10px;
+}
+.center {
+  text-align: left;
+}
+
+h1 {
+   text-align: center;
+}
+```
+
+
+
+
+
+
+\
+\
+
+# 1. Global climate models
+
+
+Global models provide us boundary conditions for the regional models and are important to produce climate projections.
+
+\
+
+### 1.1 Global Hydrological Model (HydroPy)
+
+HydroPy model provides riverine input of fresh water and nitrogen into the ocean. This model represents a further development of the Max-Plank-Instistitute Hydrological Model (MPI-HM).
+<br>
+\
+
+Read further:  https://zenodo.org/record/4730160#.YtkFS99CRPY
+
+
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+**Infobox**
+:::
+<img src="Logo_CoastalFutures_tranzparent.png"
+     alt="Markdown Monster icon"
+     style="float: right; margin-right: 10px;" 
+     width="20%"/>
+<b>Spatial resolution</b>: 0.5°
+<br>
+<b>Temporal coverage</b>: from years to centuries
+<br>
+<b>Temporal resolution</b>: daily
+<br>
+<b>Responsible Project Partner</b>: HEREON
+<br>
+<b>Contact</b>: Stefan Hagemann 
+::::
+
+\
+
+References:
+
+<font size="1">
+Stacke, T. and Hagemann, S. (2021): HydroPy (v1.0): a new global hydrology model written in Python, Geosci. Model Dev., 14, 7795–7816, https://doi.org/10.5194/gmd-14-7795-2021.
+
+Stacke, T. and S. Hagemann (2012) Development and validation of a global dynamical wetlands extent scheme. Hydrol. Earth Syst. Sci. 16, doi:10.5194/hess-16-2915-2012: 2915-2933
+</font>
+\
+\
+
+### 1.2 Hydrological Discharge Model (HD model)
+HD model provides riverine input of water, consistent with the climate forcing. The model has been currently extended to include riverine transport of nitrogen and phosphorus </b> In CoastalFutures</b>, this model  will be used to provides riverine input of water, nitrogen and phosphorus into the regional hydrodynamic and biogeochemical models.
+<br>
+Read further:   https://zenodo.org/record/5707587#.YtkFad9CRPY
+
+\
+
+References:
+
+<font size="1">
+Hagemann, S., L. Dümenil (1998) A parameterization of the lateral waterflow for the global scale. Clim. Dyn. 14 (1), 17-31
+
+Hagemann, S., T. Stacke and H. Ho-Hagemann (2020) High resolution discharge simulations over Europe and the Baltic Sea catchment. Front. Earth Sci., 8:12. doi: 10.3389/feart.2020.00012.  
+</font>
+
+<!--```{r map, echo=FALSE, out.width="60%", out.height="100%", out.extra='style="float:left; padding:30px"'}
+plot(pressure)
+```
+-->
+\
+\
+\
+
+# 2. Regional hydrodynamic and biogeochemical models
+
+\
+
+### 2.1 Coupled ocean atmosphere model IOW-ESM
+Earth System Model of the the Leibniz Institut of the Baltic Research (IOW-ESM) produces climate change scenarios for the most common ocean and atmospheric variables. It downscales global climate change scenarios from the CMIP6 suite using a coupled ocean atmosphere general circulation model with a  passively coupled marine biogeochemistry module. <b>In CoastalFutures</b>, this model is used to produce a climate change ensemble to assess future changes in air temperature, precipitation, water temperature and salinity, oxygen, productivity, water pH,  sea level, and many other variables up to the year 2100. The regional climate projections will be used  to produce scenarios for marine ecosystems using impact models (e.g species distribution models). \
+Read further: 
+https://www.io-warnemuende.de/modelling_iow.html
+
+```{r iow-esm, out.width="50%", out.height=250, out.extra='style="float:left; padding:30px"'}
+mapEU = map("world", xlim=c(-5, 30), ylim=c(50, 65), fill = TRUE, plot = FALSE)
+leaflet(data = mapEU) %>% addTiles() %>%
+  addRectangles(
+    lng1=8.02, lat1=53.59,
+    lng2=30.13, lat2=66.00,
+    fillColor = "transparent"
+  )
+```
+
+
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+**Infobox**
+:::
+<img src="Logo_CoastalFutures_tranzparent.png"
+     alt="Markdown Monster icon"
+     style="float: right; margin-right: 10px;" 
+     width="20%"/>
+<b>Spatial resolution</b>: 3nm
+<br>
+<b>Temporal coverage</b>: 1961-2100 
+<br>
+<b>Temporal resolution</b>: daily to monthly, hourly for the SSH
+<br>
+<b>Responsible Project Partner</b>: IOW
+<br>
+<b>Contact</b>: Matthias Gröger
+::::
+
+\
+
+
+
+References:
+
+
+\
+
+### 2.2 Costal Finite-volume Sea Ice-Ocean Model – FESOM-C
+
+FESOM-C is the coastal branch of the global ocean model FESOM2 developed to address the small-scale dynamics in the coastal waters, which are not usually covered by the ocean models. Its high spatial and temporal resolution allows us to study formation, spreading, and mixing of the water masses on the shelf and how these affect the biogeochemical cycle of the shelf waters. It is particularly suitable to study tidal residual circulation on the shelf and its changes under the influence of climatic factors, as well as the impacts of sea level rise on terrestrial zones.
+<b>In CoastalFutures</b>, this model provides a base for analysis of the Sylt-Rømø Bight dynamics, from physical processes to the food web and ecosystem conditions.
+
+
+
+Read further:
+https://fesom.de/models/fesom-c/ 
+\
+
+:::: {.blackbox data-latex=""}
+::: {.center data-latex=""}
+**Infobox**
+:::
+<b>Spatial resolution</b>: up to 2 m in the tidal wetting/drying zones
+<br>
+<b>Temporal coverage</b>: 2010-2020
+<br>
+<b>Temporal resolution</b>: minutes to hours
+<br>
+<b>Responsible Project Partner</b>: AWI
+<br>
+<b>Contact</b>: Gaziza Konyssova, Vera Fofonova
+::::
+\
+References:
+
+<font size="1"> 
+Androsov, A., Fofonova, V., Kuznetsov, I., Danilov, S., Rakowsky, N., Harig, S., Brix, H., and Wiltshire, K. H.: FESOM-C v.2: coastal dynamics on hybrid unstructured meshes, Geosci. Model Dev., 12, 1009–1028, https://doi.org/10.5194/gmd-12-1009-2019, 2019.
+</font>
+<br>
+\
+<font size="1">
+Kuznetsov, I.; Androsov, A.; Fofonova, V.; Danilov, S.; Rakowsky, N.; Harig, S.; Wiltshire, K.H. Evaluation and Application of Newly Designed Finite Volume Coastal Model FESOM-C, Effect of Variable Resolution in the Southeastern North Sea. Water 2020, 12, 1412. https://doi.org/10.3390/w12051412
+</font>
+
+\
+\
+
+# 3. Morphodynamic Models 
+\
+This class of models allows us to explore morthological changes and sediment transports in the coastal regions of the North and the Baltic Seas.
+\
+
+### 3.1 Telemac model suite with XBeach
+Telemac model suite calculate both hydrodynamics (water levels, currents and waves) and sediment transport (transport capacity) due to different forcings (hydrodynamics and meteorology) and their interaction with coastal protection structures and measures that effect sediment transport processes (e.g. groins, breakwaters, nourishments etc.) and morphological reactions. This model suite consists of thee modules: Telemac2d (hydrodynamics), Tomawac (waves) and Sisyphe (sediment transport). XBeach is a two-dimensional model for wave propagation, sediment transport and morphological changes of the nearshore area, beaches and dunes. <b> In CoatalFutures </b>, this model suite is used to analyse the sediment transport and morphological reactions induced by varying hydrodynamic and meteorological forcings, as well as the interaction of these processes with coastal protection structures. Another aim is to upscale the small scale dynamics in order to incorporate it into large scale/long-term models.
+
+Read further:
+http://www.opentelemac.org/
+https://oss.deltares.nl/web/xbeach/
+
+References: 
+
+<font size="1">
+Hagen, R.; Plüß, A.; Ihde, R.; Freund, J.; Dreier, N.; Nehlsen, E.; Schrage, N.; Fröhle, P.; Kösters, F.: An Integrated Marine Data Collection for the German Bight – Part II: Tides, Salinity and Waves (1996–2015 CE), doi: 10.5194/essd-2021-45, 2021.
+
+Hillmann, S.; Geertsen, K.-S.; Quataert, E.; Hoogland, R.; Frederiksen, B.: Influencing the SPR for storm surge events. A cross-border XBeach application. Final Report, Version 2.0. Interreg North Sea Region VB – Building with Nature, 2021.
+
+</font>
+
+\
+\
+
+# 4. Species Distribution Models
+\
+\
+
+### 4.1 Fish distribution model: TIMoFiD
+TIMoFiD (Thünen-Institute Model of Fish Distribution) is a species distribution model developed and applied to model the past and the future distribution of marine fishes. Although the model is generic and can be applied to various areas, we will focus here on the North and the Baltic Sea. 
+\
+
+```{r timofid, out.width="50%", out.height=250, out.extra='style="float:left; padding:30px"'}
+mapEU = map("world", xlim=c(-5, 30), ylim=c(50, 65), fill = TRUE, plot = FALSE)
+leaflet(data = mapEU) %>% addTiles() %>%
+  addRectangles(
+    lng1=-5, lat1=50,
+    lng2=10, lat2=64,
+    fillColor = "transparent"
+  )
+```
+References: 
+
+<font size="1">
+Núñez-Riboni, I., A. Akimova and A. F. Sell, 2021. Effect of data spatial scale on the performance of fish habitat models. Fish and Fisheries, 22:955–973. DOI: 10.1111/faf.12563; Open Access: https://onlinelibrary.wiley.com/doi/10.1111/faf.12563
+
+Núñez-Riboni, I., Taylor, M., Püts, M., Kempf A. and Mathis, M., 2019. Spatially resolved past and projected changes of the suitable thermal habitat of North Sea cod (Gadus morhua) under climate change. ICES Journal of Marine Science, Volume 76, Issue 7, Pages 2389–2403. DOI:10.1093/icesjms/fsz132. Open Access URL: https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsz132/5538730
+</font>
+
+\
+\
+
+### 4.2 Marine mammals distribution model
+Species distribution models are often applied to estimate the effects of environmental (e.g. temperature, primary productivity, bathymetry ) or anthropogenic (e.g. intensity of maritime traffic, construction and operation of windfarms) factors on the abundance and spatial distribution of marine mammals. Once these effects are quantified, species distribution models can be used to predict distribution of marine mammals in the areas with no observations or under future conditions. <b> In Coastal Futures </b>, we aim to study the distribution of harbour porpoise in the North and the Baltic Seas and how this animal responds to the changing environment due to climate change and anthropogenic activities. To achieve this, data on  porpoise density collected along standardized surveys together with the associated values of environmental and anthropogenic factors will be used to calibrate a species distribution model. This modelling will provide additional information to adapt future conservation and management measures for the harbour porpoise.
+
+
+
+References:
+
+<font size="1">
+Gilles, A., Viquerat, S., Becker, E., Forney, K., Geelhoed, S., Haelters, J., Nabe‐Nielsen, J., Scheidat, M., Siebert, U. and Sveegaard, S. (2016). Seasonal habitat‐based density models for a marine top predator, the harbor porpoise, in a dynamic environment. Ecosphere 7 (6): e01367
+
+Lacey, C., Gilles, A., Börjesson, P., Herr, H., Macleod, K., Ridoux, V., Santos, M.B., Scheidat, M., Teilmann, J., Vingada, J., Viquerat, S., Øien, N., Hammond, P. (2022). Modelled density surfaces of cetaceans in European Atlantic waters in summer 2016 from the SCANS-III aerial and shipboard surveys. Final report. https://scans3.wp.st-andrews.ac.uk/resources/
+<font>

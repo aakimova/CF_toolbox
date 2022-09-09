@@ -1,0 +1,13 @@
+name: "CF Box of tools"
+navbar:
+  title: "CF Box of Tools"
+  right:
+    - text: "CoastalFutures"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Our Models"
+      href: models.html
+    - text: "Project Partners"
+      href: partnerss.html
+      
