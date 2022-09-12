@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>models.knit</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.1.1/leaflet.js"></script>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CF Box of Tools</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">CoastalFutures</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="models.html">Our Models</a>
+</li>
+<li>
+  <a href="partnerss.html">Project Partners</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<p><br />
+</p>
+<span style="color: black;">
+<center>
+<b> Please choose a model from the Menu on your left or scroll down to choose the model of interest: </b>
+</center>
+<p></span></p>
+<style type="text/css">
+.blackbox {
+  padding: 1em;
+  background: rgb(135,206,250, 0.2);
+  color: black;
+  border: 2px solid rgb(135,206,250, 0.8);
+  border-radius: 10px;
+}
+.center {
+  text-align: left;
+}
+
+h1 {
+   text-align: center;
+}
+</style>
+<p><br />
+<br />
+</p>
+<div id="global-climate-models" class="section level1">
+<h1>1. Global climate models</h1>
+<p>Global models provide us boundary conditions for the regional models and are important to produce climate projections.</p>
+<p><br />
+</p>
+<div id="global-hydrological-model-hydropy" class="section level3">
+<h3>1.1 Global Hydrological Model (HydroPy)</h3>
+<p>HydroPy model provides riverine input of fresh water and nitrogen into the ocean. This model represents a further development of the Max-Plank-Instistitute Hydrological Model (MPI-HM). <br><br />
+</p>
+<p>Read further: <a href="https://zenodo.org/record/4730160#.YtkFS99CRPY" class="uri">https://zenodo.org/record/4730160#.YtkFS99CRPY</a></p>
+<div class="blackbox">
+<div class="center">
+<p><strong>Infobox</strong></p>
+</div>
+<p><img src="Logo_CoastalFutures_tranzparent.png"
+     alt="Markdown Monster icon"
+     style="float: right; margin-right: 10px;" 
+     width="20%"/> <b>Spatial resolution</b>: 0.5° <br> <b>Temporal coverage</b>: from years to centuries <br> <b>Temporal resolution</b>: daily <br> <b>Responsible Project Partner</b>: HEREON <br> <b>Contact</b>: Stefan Hagemann</p>
+</div>
+<p><br />
+</p>
+<p>References:</p>
+<p><font size="1"> Stacke, T. and Hagemann, S. (2021): HydroPy (v1.0): a new global hydrology model written in Python, Geosci. Model Dev., 14, 7795–7816, <a href="https://doi.org/10.5194/gmd-14-7795-2021" class="uri">https://doi.org/10.5194/gmd-14-7795-2021</a>.</p>
+<p>Stacke, T. and S. Hagemann (2012) Development and validation of a global dynamical wetlands extent scheme. Hydrol. Earth Syst. Sci. 16, <a href="doi:10.5194/hess-16-2915-2012" class="uri">doi:10.5194/hess-16-2915-2012</a>: 2915-2933 </font><br />
+<br />
+</p>
+</div>
+<div id="hydrological-discharge-model-hd-model" class="section level3">
+<h3>1.2 Hydrological Discharge Model (HD model)</h3>
+<p>HD model provides riverine input of water, consistent with the climate forcing. The model has been currently extended to include riverine transport of nitrogen and phosphorus </b> In CoastalFutures</b>, this model will be used to provides riverine input of water, nitrogen and phosphorus into the regional hydrodynamic and biogeochemical models. <br> Read further: <a href="https://zenodo.org/record/5707587#.YtkFad9CRPY" class="uri">https://zenodo.org/record/5707587#.YtkFad9CRPY</a></p>
+<p><br />
+</p>
+<p>References:</p>
+<p><font size="1"> Hagemann, S., L. Dümenil (1998) A parameterization of the lateral waterflow for the global scale. Clim. Dyn. 14 (1), 17-31</p>
+<p>Hagemann, S., T. Stacke and H. Ho-Hagemann (2020) High resolution discharge simulations over Europe and the Baltic Sea catchment. Front. Earth Sci., 8:12. doi: 10.3389/feart.2020.00012.<br />
+</font></p>
+<!--```{r map, echo=FALSE, out.width="60%", out.height="100%", out.extra='style="float:left; padding:30px"'}
+plot(pressure)
+```
+-->
+<p><br />
+<br />
+<br />
+</p>
+</div>
+</div>
+<div id="regional-hydrodynamic-and-biogeochemical-models" class="section level1">
+<h1>2. Regional hydrodynamic and biogeochemical models</h1>
+<p><br />
+</p>
+<div id="coupled-ocean-atmosphere-model-iow-esm" class="section level3">
+<h3>2.1 Coupled ocean atmosphere model IOW-ESM</h3>
+<p>Earth System Model of the the Leibniz Institut of the Baltic Research (IOW-ESM) produces climate change scenarios for the most common ocean and atmospheric variables. It downscales global climate change scenarios from the CMIP6 suite using a coupled ocean atmosphere general circulation model with a passively coupled marine biogeochemistry module. <b>In CoastalFutures</b>, this model is used to produce a climate change ensemble to assess future changes in air temperature, precipitation, water temperature and salinity, oxygen, productivity, water pH, sea level, and many other variables up to the year 2100. The regional climate projections will be used to produce scenarios for marine ecosystems using impact models (e.g species distribution models).<br />
+Read further: <a href="https://www.io-warnemuende.de/modelling_iow.html" class="uri">https://www.io-warnemuende.de/modelling_iow.html</a></p>
+<div id="htmlwidget-e6a347492b3654ec68c5" style="width:50%;height:250px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e6a347492b3654ec68c5">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addRectangles","args":[53.59,8.02,66,30.13,null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"transparent","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[53.59,66],"lng":[8.02,30.13]}},"evals":[],"jsHooks":[]}</script>
+<div class="blackbox">
+<div class="center">
+<p><strong>Infobox</strong></p>
+</div>
+<p><img src="Logo_CoastalFutures_tranzparent.png"
+     alt="Markdown Monster icon"
+     style="float: right; margin-right: 10px;" 
+     width="20%"/> <b>Spatial resolution</b>: 3nm <br> <b>Temporal coverage</b>: 1961-2100 <br> <b>Temporal resolution</b>: daily to monthly, hourly for the SSH <br> <b>Responsible Project Partner</b>: IOW <br> <b>Contact</b>: Matthias Gröger</p>
+</div>
+<p><br />
+</p>
+<p>References:</p>
+<p><br />
+</p>
+</div>
+<div id="costal-finite-volume-sea-ice-ocean-model-fesom-c" class="section level3">
+<h3>2.2 Costal Finite-volume Sea Ice-Ocean Model – FESOM-C</h3>
+<p>FESOM-C is the coastal branch of the global ocean model FESOM2 developed to address the small-scale dynamics in the coastal waters, which are not usually covered by the ocean models. Its high spatial and temporal resolution allows us to study formation, spreading, and mixing of the water masses on the shelf and how these affect the biogeochemical cycle of the shelf waters. It is particularly suitable to study tidal residual circulation on the shelf and its changes under the influence of climatic factors, as well as the impacts of sea level rise on terrestrial zones. <b>In CoastalFutures</b>, this model provides a base for analysis of the Sylt-Rømø Bight dynamics, from physical processes to the food web and ecosystem conditions.</p>
+<p>Read further: <a href="https://fesom.de/models/fesom-c/" class="uri">https://fesom.de/models/fesom-c/</a><br />
+</p>
+<div class="blackbox">
+<div class="center">
+<p><strong>Infobox</strong></p>
+</div>
+<p><b>Spatial resolution</b>: up to 2 m in the tidal wetting/drying zones <br> <b>Temporal coverage</b>: 2010-2020 <br> <b>Temporal resolution</b>: minutes to hours <br> <b>Responsible Project Partner</b>: AWI <br> <b>Contact</b>: Gaziza Konyssova, Vera Fofonova</p>
+</div>
+<p><br />
+References:</p>
+<p><font size="1"> Androsov, A., Fofonova, V., Kuznetsov, I., Danilov, S., Rakowsky, N., Harig, S., Brix, H., and Wiltshire, K. H.: FESOM-C v.2: coastal dynamics on hybrid unstructured meshes, Geosci. Model Dev., 12, 1009–1028, <a href="https://doi.org/10.5194/gmd-12-1009-2019" class="uri">https://doi.org/10.5194/gmd-12-1009-2019</a>, 2019. </font> <br><br />
+<font size="1"> Kuznetsov, I.; Androsov, A.; Fofonova, V.; Danilov, S.; Rakowsky, N.; Harig, S.; Wiltshire, K.H. Evaluation and Application of Newly Designed Finite Volume Coastal Model FESOM-C, Effect of Variable Resolution in the Southeastern North Sea. Water 2020, 12, 1412. <a href="https://doi.org/10.3390/w12051412" class="uri">https://doi.org/10.3390/w12051412</a> </font></p>
+<p><br />
+<br />
+</p>
+</div>
+</div>
+<div id="morphodynamic-models" class="section level1">
+<h1>3. Morphodynamic Models</h1>
+<p><br />
+This class of models allows us to explore morthological changes and sediment transports in the coastal regions of the North and the Baltic Seas.<br />
+</p>
+<div id="telemac-model-suite-with-xbeach" class="section level3">
+<h3>3.1 Telemac model suite with XBeach</h3>
+<p>Telemac model suite calculate both hydrodynamics (water levels, currents and waves) and sediment transport (transport capacity) due to different forcings (hydrodynamics and meteorology) and their interaction with coastal protection structures and measures that effect sediment transport processes (e.g. groins, breakwaters, nourishments etc.) and morphological reactions. This model suite consists of thee modules: Telemac2d (hydrodynamics), Tomawac (waves) and Sisyphe (sediment transport). XBeach is a two-dimensional model for wave propagation, sediment transport and morphological changes of the nearshore area, beaches and dunes. <b> In CoatalFutures </b>, this model suite is used to analyse the sediment transport and morphological reactions induced by varying hydrodynamic and meteorological forcings, as well as the interaction of these processes with coastal protection structures. Another aim is to upscale the small scale dynamics in order to incorporate it into large scale/long-term models.</p>
+<p>Read further: <a href="http://www.opentelemac.org/" class="uri">http://www.opentelemac.org/</a> <a href="https://oss.deltares.nl/web/xbeach/" class="uri">https://oss.deltares.nl/web/xbeach/</a></p>
+<p>References:</p>
+<p><font size="1"> Hagen, R.; Plüß, A.; Ihde, R.; Freund, J.; Dreier, N.; Nehlsen, E.; Schrage, N.; Fröhle, P.; Kösters, F.: An Integrated Marine Data Collection for the German Bight – Part II: Tides, Salinity and Waves (1996–2015 CE), doi: 10.5194/essd-2021-45, 2021.</p>
+<p>Hillmann, S.; Geertsen, K.-S.; Quataert, E.; Hoogland, R.; Frederiksen, B.: Influencing the SPR for storm surge events. A cross-border XBeach application. Final Report, Version 2.0. Interreg North Sea Region VB – Building with Nature, 2021.</p>
+<p></font></p>
+<p><br />
+<br />
+</p>
+</div>
+</div>
+<div id="species-distribution-models" class="section level1">
+<h1>4. Species Distribution Models</h1>
+<p><br />
+<br />
+</p>
+<div id="fish-distribution-model-timofid" class="section level3">
+<h3>4.1 Fish distribution model: TIMoFiD</h3>
+<p>TIMoFiD (Thünen-Institute Model of Fish Distribution) is a species distribution model developed and applied to model the past and the future distribution of marine fishes. Although the model is generic and can be applied to various areas, we will focus here on the North and the Baltic Sea.<br />
+</p>
+<div id="htmlwidget-8ac74fb4d81dc4ca438a" style="width:50%;height:250px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8ac74fb4d81dc4ca438a">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addRectangles","args":[50,-5,64,10,null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"transparent","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[50,64],"lng":[-5,10]}},"evals":[],"jsHooks":[]}</script>
+<p>References:</p>
+<p><font size="1"> Núñez-Riboni, I., A. Akimova and A. F. Sell, 2021. Effect of data spatial scale on the performance of fish habitat models. Fish and Fisheries, 22:955–973. DOI: 10.1111/faf.12563; Open Access: <a href="https://onlinelibrary.wiley.com/doi/10.1111/faf.12563" class="uri">https://onlinelibrary.wiley.com/doi/10.1111/faf.12563</a></p>
+<p>Núñez-Riboni, I., Taylor, M., Püts, M., Kempf A. and Mathis, M., 2019. Spatially resolved past and projected changes of the suitable thermal habitat of North Sea cod (Gadus morhua) under climate change. ICES Journal of Marine Science, Volume 76, Issue 7, Pages 2389–2403. <a href="DOI:10.1093/icesjms/fsz132" class="uri">DOI:10.1093/icesjms/fsz132</a>. Open Access URL: <a href="https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsz132/5538730" class="uri">https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsz132/5538730</a> </font></p>
+<p><br />
+<br />
+</p>
+</div>
+<div id="marine-mammals-distribution-model" class="section level3">
+<h3>4.2 Marine mammals distribution model</h3>
+<p>Species distribution models are often applied to estimate the effects of environmental (e.g. temperature, primary productivity, bathymetry ) or anthropogenic (e.g. intensity of maritime traffic, construction and operation of windfarms) factors on the abundance and spatial distribution of marine mammals. Once these effects are quantified, species distribution models can be used to predict distribution of marine mammals in the areas with no observations or under future conditions. <b> In Coastal Futures </b>, we aim to study the distribution of harbour porpoise in the North and the Baltic Seas and how this animal responds to the changing environment due to climate change and anthropogenic activities. To achieve this, data on porpoise density collected along standardized surveys together with the associated values of environmental and anthropogenic factors will be used to calibrate a species distribution model. This modelling will provide additional information to adapt future conservation and management measures for the harbour porpoise.</p>
+<p>References:</p>
+<p><font size="1"> Gilles, A., Viquerat, S., Becker, E., Forney, K., Geelhoed, S., Haelters, J., Nabe‐Nielsen, J., Scheidat, M., Siebert, U. and Sveegaard, S. (2016). Seasonal habitat‐based density models for a marine top predator, the harbor porpoise, in a dynamic environment. Ecosphere 7 (6): e01367</p>
+<p>Lacey, C., Gilles, A., Börjesson, P., Herr, H., Macleod, K., Ridoux, V., Santos, M.B., Scheidat, M., Teilmann, J., Vingada, J., Viquerat, S., Øien, N., Hammond, P. (2022). Modelled density surfaces of cetaceans in European Atlantic waters in summer 2016 from the SCANS-III aerial and shipboard surveys. Final report. <a href="https://scans3.wp.st-andrews.ac.uk/resources/" class="uri">https://scans3.wp.st-andrews.ac.uk/resources/</a> <font></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
